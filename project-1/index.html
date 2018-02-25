@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+
+<!--
+Instructions:
+Move back and forward: W/S
+Roll Left and Right: A/D
+Pitch down and up: I/K
+Yaw Left and Right: J/L
+
+-->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>3D Objects</title>
+  <script src="webgl-utils.js"></script>
+  <script src="shader-utils.js"></script>
+  <script src="gl-matrix-min.js"></script>
+  <script src="geometry/Object3D.js"></script>
+  <script src="geometry/Cone.js"></script>
+  <script src="geometry/PolygonalPrism.js"></script>
+  <script src="geometry/Sphere.js"></script>
+  <script src="geometry/Torus.js"></script>
+  <script src="ObjectGroup.js"></script>
+  <script src="Arrow.js"></script>
+  <script src="Axes.js"></script>
+  <script src="Olympic.js"></script>
+  <script src="ClockTower.js"></script>
+  <script src="render.js"></script>
+  <style>
+    html {
+      height: 100%;
+    }
+    body {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+    }
+    #container {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      background: lavender;
+    }
+  </style>
+</head>
+<body onload="main()">
+  <h2>Cityscape</h2>
+  <div id="container">
+    <canvas id="my-canvas"></canvas>
+  </div>
+</body>
+</html>
