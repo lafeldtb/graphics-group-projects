@@ -93,7 +93,7 @@ class ClockTower extends ObjectGroup {
                     vec3.fromValues(
                         x * 1.375,
                         y * 1.375,
-                        0 + (i * (0.75 + (0.75 * (1 / 6))))));
+                        (i * (0.75 + (0.75 * (1 / 6))))));
                 mat4.scale(columnBlock.coordFrame, columnBlock.coordFrame, vec3.fromValues(0.375, 0.375, 0.75));
 
                 //Column block trim
@@ -118,6 +118,56 @@ class ClockTower extends ObjectGroup {
 
             }
         }
+
+        /* Middle of tower filler */
+
+        let midFill = new PolygonalPrism(gl,
+            {
+                topRadius: 1,
+                bottomRadius: 1,
+                numSides: 4,
+                height: 1,
+                topColor: vec3.fromValues(0.5, 0.2, 0),
+                bottomColor: vec3.fromValues(0.5, 0.2, 0),
+            });
+        mat4.scale(midFill.coordFrame, midFill.coordFrame, vec3.fromValues(1.65, 1.65, 7));
+
+        midGroup.group.push(midFill);
+
+        /* Bell area frame */
+
+        let bellSection = new ObjectGroup(gl);
+        midGroup.group.push(bellSection);
+
+        let ring = new Torus(gl,
+            {
+                majorRadius: 1,
+                minorRadius: 0.05,
+            });
+        mat4.rotateX(ring.coordFrame, ring.coordFrame, glMatrix.toRadian(90));
+        mat4.rotateY(ring.coordFrame, ring.coordFrame, glMatrix.toRadian(135));
+        mat4.translate(ring.coordFrame, ring.coordFrame, vec3.fromValues(0, 0, 1.25));
+        mat4.scale(ring.coordFrame, ring.coordFrame, vec3.fromValues(0.25, 0.25, 0.25));
+        mat4.translate(ring.coordFrame, ring.coordFrame, vec3.fromValues(0, 1.85, 0));
+
+        bellSection.group.push(ring);
+
+        let bar = new PolygonalPrism(gl,
+            {
+                topRadius: 0.025,
+                bottomRadius: 0.025,
+                height: 2,
+                numSides: 20,
+            });
+        mat4.rotateZ(bar.coordFrame, bar.coordFrame, glMatrix.toRadian(45));
+        mat4.translate(bar.coordFrame, bar.coordFrame, vec3.fromValues(1.25, 0, 0));
+        mat4.scale(bar.coordFrame, bar.coordFrame, vec3.fromValues(1, 1, 0.5));
+
+        bellSection.group.push(bar);
+
+
+
+        mat4.translate(bellSection.coordFrame, bellSection.coordFrame, vec3.fromValues(0, 0, 7.5));
 
         mat4.translate(midGroup.coordFrame, midGroup.coordFrame, vec3.fromValues(0, 0, 1.125));
 

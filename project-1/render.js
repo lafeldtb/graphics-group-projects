@@ -3,12 +3,12 @@
  * Edited by Benjamin LaFeldt
  */
 
-let canvas
+let canvas;
 let gl;
 let allObjs = [];
 
-var projUnif;
-var projMat, viewMat;
+let projUnif;
+let projMat, viewMat;
 
 function main() {
   canvas = document.getElementById("my-canvas");
@@ -49,8 +49,8 @@ function main() {
     projMat = mat4.create();
     gl.uniformMatrix4fv (projUnif, false, projMat);
     viewMat = mat4.lookAt(mat4.create(),
-      vec3.fromValues (2, 4, 2),  // eye coord
-      vec3.fromValues (0, 0, 1),  // gaze point
+      vec3.fromValues (1.5, 1, 2.5),  // eye coord
+      vec3.fromValues (0, 0, 2.5),  // gaze point
       vec3.fromValues (0, 0, 1)   // Z is up
     );
     gl.uniformMatrix4fv (viewUnif, false, viewMat);
@@ -70,7 +70,7 @@ function drawScene() {
     gl.uniformMatrix4fv (viewUnif, false, viewMat);
 
     /* in the following three cases we rotate the coordinate frame by 1 degree */
-    for (var k = 0; k < allObjs.length; k++)
+    for (let k = 0; k < allObjs.length; k++)
     allObjs[k].draw(gl);
 
 }
@@ -78,6 +78,8 @@ function drawScene() {
 function createObject() {
     let tower = new ClockTower(gl);
     let ax = new Axes(gl);
+
+    mat4.scale(tower.coordFrame, tower.coordFrame, vec3.fromValues(0.25, 0.25, 0.25));
 
     allObjs.push(ax);
     allObjs.push(tower);
@@ -95,7 +97,7 @@ function resizeWindow() {
 
 function setupHandlers() {
     window.addEventListener('keydown', event => {
-        var key = String.fromCharCode(event.keyCode);
+        let key = String.fromCharCode(event.keyCode);
         let position = mat4.create();
         switch(key) {
             case 'W':
