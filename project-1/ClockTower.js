@@ -152,7 +152,7 @@ class ClockTower extends ObjectGroup {
                 mat4.rotateX(ring.coordFrame, ring.coordFrame, glMatrix.toRadian(90));
                 mat4.rotateY(ring.coordFrame, ring.coordFrame, glMatrix.toRadian(135 + (90 * itr)));
                 mat4.translate(ring.coordFrame, ring.coordFrame, vec3.fromValues(0, 0, 1.25));
-                mat4.scale(ring.coordFrame, ring.coordFrame, vec3.fromValues(0.25, 0.25, 0.25));
+                mat4.scale(ring.coordFrame, ring.coordFrame, vec3.fromValues(0.25, 0.25, 0.5));
                 mat4.translate(ring.coordFrame, ring.coordFrame, vec3.fromValues(0, 1.85 + (4.5 * h), 0));
 
                 bellSection.group.push(ring);
@@ -170,8 +170,8 @@ class ClockTower extends ObjectGroup {
                         });
                     mat4.rotateZ(vertbar.coordFrame, vertbar.coordFrame, glMatrix.toRadian(45 + (90 * itr)));
                     mat4.translate(vertbar.coordFrame, vertbar.coordFrame, vec3.fromValues(1.25, 0, 0));
-                    //mat4.scale(vertbar.coordFrame, vertbar.coordFrame, vec3.fromValues(1, 1, 0.5));
                     mat4.translate(vertbar.coordFrame, vertbar.coordFrame, vec3.fromValues(0, i, h));
+                    mat4.scale(vertbar.coordFrame, vertbar.coordFrame, vec3.fromValues(1, 1.5, 1));
 
                     bellSection.group.push(vertbar);
                 }
@@ -192,6 +192,7 @@ class ClockTower extends ObjectGroup {
                     mat4.scale(horizBar.coordFrame, horizBar.coordFrame, vec3.fromValues(1, 1, 0.5));
                     mat4.rotateX(horizBar.coordFrame, horizBar.coordFrame, glMatrix.toRadian(90));
                     mat4.translate(horizBar.coordFrame, horizBar.coordFrame, vec3.fromValues(0, i + (h * 2.25), -1));
+                    mat4.scale(horizBar.coordFrame, horizBar.coordFrame, vec3.fromValues(1, 1.5, 1));
 
                     bellSection.group.push(horizBar);
                 }
