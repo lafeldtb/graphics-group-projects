@@ -139,35 +139,84 @@ class ClockTower extends ObjectGroup {
         let bellSection = new ObjectGroup(gl);
         midGroup.group.push(bellSection);
 
-        let ring = new Torus(gl,
+        for(let h = 0; h < 4; h++) {
+            for (let itr = 0; itr < 4; itr++) {
+                //Mid circle
+                let ring = new Torus(gl,
+                    {
+                        majorRadius: 1,
+                        minorRadius: 0.05,
+                        topColor: vec3.fromValues(1, 0.8, 0.7),
+                        bottomColor: vec3.fromValues(1, 0.8, 0.7),
+                    });
+                mat4.rotateX(ring.coordFrame, ring.coordFrame, glMatrix.toRadian(90));
+                mat4.rotateY(ring.coordFrame, ring.coordFrame, glMatrix.toRadian(135 + (90 * itr)));
+                mat4.translate(ring.coordFrame, ring.coordFrame, vec3.fromValues(0, 0, 1.25));
+                mat4.scale(ring.coordFrame, ring.coordFrame, vec3.fromValues(0.25, 0.25, 0.25));
+                mat4.translate(ring.coordFrame, ring.coordFrame, vec3.fromValues(0, 1.85 + (4.5 * h), 0));
+
+                bellSection.group.push(ring);
+
+                //Vertical Bars
+                for (let i = -0.5; i < 0.75; i += 0.25) {
+                    let vertbar = new PolygonalPrism(gl,
+                        {
+                            topRadius: 0.025,
+                            bottomRadius: 0.025,
+                            height: 2,
+                            numSides: 20,
+                            topColor: vec3.fromValues(1, 0.8, 0.7),
+                            bottomColor: vec3.fromValues(1, 0.8, 0.7),
+                        });
+                    mat4.rotateZ(vertbar.coordFrame, vertbar.coordFrame, glMatrix.toRadian(45 + (90 * itr)));
+                    mat4.translate(vertbar.coordFrame, vertbar.coordFrame, vec3.fromValues(1.25, 0, 0));
+                    //mat4.scale(vertbar.coordFrame, vertbar.coordFrame, vec3.fromValues(1, 1, 0.5));
+                    mat4.translate(vertbar.coordFrame, vertbar.coordFrame, vec3.fromValues(0, i, h));
+
+                    bellSection.group.push(vertbar);
+                }
+
+                //Horizontal bars
+                for (let i = 0; i < 3; i++) {
+                    let horizBar = new PolygonalPrism(gl,
+                        {
+                            topRadius: 0.025,
+                            bottomRadius: 0.025,
+                            height: 2,
+                            numSides: 20,
+                            topColor: vec3.fromValues(1, 0.8, 0.7),
+                            bottomColor: vec3.fromValues(1, 0.8, 0.7),
+                        });
+                    mat4.rotateZ(horizBar.coordFrame, horizBar.coordFrame, glMatrix.toRadian(45 + (90 * itr)));
+                    mat4.translate(horizBar.coordFrame, horizBar.coordFrame, vec3.fromValues(1.25, 0, 0));
+                    mat4.scale(horizBar.coordFrame, horizBar.coordFrame, vec3.fromValues(1, 1, 0.5));
+                    mat4.rotateX(horizBar.coordFrame, horizBar.coordFrame, glMatrix.toRadian(90));
+                    mat4.translate(horizBar.coordFrame, horizBar.coordFrame, vec3.fromValues(0, i + (h * 2.25), -1));
+
+                    bellSection.group.push(horizBar);
+                }
+            }
+        }
+        //mat4.fromZRotation(bellSection.coordFrame, glMatrix.toRadian(90));
+        mat4.translate(bellSection.coordFrame, bellSection.coordFrame, vec3.fromValues(0, 0, 7));
+        mat4.scale(bellSection.coordFrame, bellSection.coordFrame, vec3.fromValues(0.75, 0.75, 0.75));
+
+
+        /* Mid section cap */
+
+        let midCap = new PolygonalPrism(gl,
             {
-                majorRadius: 1,
-                minorRadius: 0.05,
+                topRadius: 1,
+                bottomRadius: 1,
+                numSides: 4,
+                height: 1,
+                topColor: vec3.fromValues(0.5, 0.2, 0),
+                bottomColor: vec3.fromValues(0.5, 0.2, 0),
             });
-        mat4.rotateX(ring.coordFrame, ring.coordFrame, glMatrix.toRadian(90));
-        mat4.rotateY(ring.coordFrame, ring.coordFrame, glMatrix.toRadian(135));
-        mat4.translate(ring.coordFrame, ring.coordFrame, vec3.fromValues(0, 0, 1.25));
-        mat4.scale(ring.coordFrame, ring.coordFrame, vec3.fromValues(0.25, 0.25, 0.25));
-        mat4.translate(ring.coordFrame, ring.coordFrame, vec3.fromValues(0, 1.85, 0));
+        mat4.scale(midCap.coordFrame, midCap.coordFrame, vec3.fromValues(1.75, 1.75, 1));
+        mat4.translate(midCap.coordFrame, midCap.coordFrame, vec3.fromValues(0, 0, 10.5));
+        midGroup.group.push(midCap);
 
-        bellSection.group.push(ring);
-
-        let bar = new PolygonalPrism(gl,
-            {
-                topRadius: 0.025,
-                bottomRadius: 0.025,
-                height: 2,
-                numSides: 20,
-            });
-        mat4.rotateZ(bar.coordFrame, bar.coordFrame, glMatrix.toRadian(45));
-        mat4.translate(bar.coordFrame, bar.coordFrame, vec3.fromValues(1.25, 0, 0));
-        mat4.scale(bar.coordFrame, bar.coordFrame, vec3.fromValues(1, 1, 0.5));
-
-        bellSection.group.push(bar);
-
-
-
-        mat4.translate(bellSection.coordFrame, bellSection.coordFrame, vec3.fromValues(0, 0, 7.5));
 
         mat4.translate(midGroup.coordFrame, midGroup.coordFrame, vec3.fromValues(0, 0, 1.125));
 
