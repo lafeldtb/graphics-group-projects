@@ -222,6 +222,53 @@ class ClockTower extends ObjectGroup {
         mat4.translate(midGroup.coordFrame, midGroup.coordFrame, vec3.fromValues(0, 0, 1.125));
 
 
+        /* Clock section */
+        let clockGroup = new ObjectGroup(gl);
+        this.group.push(clockGroup);
+
+        let clockSide = new PolygonalPrism(gl,
+            {
+                topRadius: 1,
+                bottomRadius: 1,
+                numSides: 4,
+                height: 1,
+                topColor: vec3.fromValues(1, 0.8, 0.7),
+                bottomColor: vec3.fromValues(1, 0.8, 0.7),
+            });
+        mat4.scale(clockSide.coordFrame, clockSide.coordFrame, vec3.fromValues(1.65, 1.65, 2.25));
+        clockGroup.group.push(clockSide);
+
+        let clockFaceOuter = new Torus(gl,
+            {
+                majorRadius: 1,
+                minorRadius: 0.02,
+//                topColor: vec3.fromValues(1, 0.8, 0.7),
+//                bottomColor: vec3.fromValues(1, 0.8, 0.7),
+            });
+        mat4.rotateX(clockFaceOuter.coordFrame, clockFaceOuter.coordFrame, glMatrix.toRadian(90));
+        mat4.rotateY(clockFaceOuter.coordFrame, clockFaceOuter.coordFrame, glMatrix.toRadian(135));
+        mat4.translate(clockFaceOuter.coordFrame, clockFaceOuter.coordFrame, vec3.fromValues(0, 0, 1.25));
+        mat4.scale(clockFaceOuter.coordFrame, clockFaceOuter.coordFrame, vec3.fromValues(0.75, 0.75, 0.75));
+        mat4.translate(clockFaceOuter.coordFrame, clockFaceOuter.coordFrame, vec3.fromValues(0, 1.5, 0));
+
+        clockGroup.group.push(clockFaceOuter);
+
+        let clockFaceInner = new Torus(gl,
+            {
+                majorRadius: 1,
+                minorRadius: 0.02,
+//                topColor: vec3.fromValues(1, 0.8, 0.7),
+//                bottomColor: vec3.fromValues(1, 0.8, 0.7),
+            });
+        mat4.rotateX(clockFaceInner.coordFrame, clockFaceInner.coordFrame, glMatrix.toRadian(90));
+        mat4.rotateY(clockFaceInner.coordFrame, clockFaceInner.coordFrame, glMatrix.toRadian(135));
+        mat4.translate(clockFaceInner.coordFrame, clockFaceInner.coordFrame, vec3.fromValues(0, 0, 1.25));
+        mat4.scale(clockFaceInner.coordFrame, clockFaceInner.coordFrame, vec3.fromValues(0.75, 0.75, 0.75));
+        mat4.translate(clockFaceInner.coordFrame, clockFaceInner.coordFrame, vec3.fromValues(0, 1.5, 0));
+        mat4.scale(clockFaceInner.coordFrame, clockFaceInner.coordFrame, vec3.fromValues(0.75, 0.75, 0.75));
+
+        clockGroup.group.push(clockFaceInner);
+        mat4.translate(clockGroup.coordFrame, clockGroup.coordFrame, vec3.fromValues(0, 0, 12.625));
 
 
     }
