@@ -292,7 +292,6 @@ class ClockTower extends ObjectGroup {
             clockGroup.group.push(clockSmallHand);
 
         }
-        //TODO: trim and slant also below clock block
         let clockTrimTop = new PolygonalPrism(gl,
             {
                 topRadius: 1,
@@ -318,5 +317,60 @@ class ClockTower extends ObjectGroup {
         clockGroup.group.push(clockTrimTopSlant);
 
         mat4.translate(clockGroup.coordFrame, clockGroup.coordFrame, vec3.fromValues(0, 0, 12.625));
+
+        /* Top of clock */
+        let crownGroup = new ObjectGroup(gl);
+        this.group.push(crownGroup);
+
+        let crownBase = new PolygonalPrism(gl,
+            {
+                topRadius: 1,
+                bottomRadius: 1,
+                numSides: 4,
+                height: 1,
+                topColor: vec3.fromValues(0, 0.3, 0.2),
+                bottomColor: vec3.fromValues(0, 0.3, 0.2),
+            });
+        mat4.scale(crownBase.coordFrame, crownBase.coordFrame, vec3.fromValues(1.65, 1.65, 0.75));
+        crownGroup.group.push(crownBase);
+
+        let crownCurve1 = new PolygonalPrism(gl,
+            {
+                topRadius: 1,
+                bottomRadius: 1,
+                numSides: 20,
+                height: 1,
+                topColor: vec3.fromValues(0, 0.28, 0.18),
+                bottomColor: vec3.fromValues(0, 0.28, 0.18),
+                semiCircle: Math.PI,
+            });
+        mat4.translate(crownCurve1.coordFrame, crownCurve1.coordFrame, vec3.fromValues(0, 0, 0.50))
+        mat4.rotateX(crownCurve1.coordFrame, crownCurve1.coordFrame, glMatrix.toRadian(90));
+        mat4.rotateY(crownCurve1.coordFrame, crownCurve1.coordFrame, glMatrix.toRadian(135));
+        mat4.rotateZ(crownCurve1.coordFrame, crownCurve1.coordFrame, glMatrix.toRadian(5));
+        mat4.scale(crownCurve1.coordFrame, crownCurve1.coordFrame, vec3.fromValues(1.25, 1.25, 2.5));
+        mat4.translate(crownCurve1.coordFrame, crownCurve1.coordFrame, vec3.fromValues(0, 0, -0.5))
+        crownGroup.group.push(crownCurve1);
+
+        let crownCurve2 = new PolygonalPrism(gl,
+            {
+                topRadius: 1,
+                bottomRadius: 1,
+                numSides: 20,
+                height: 1,
+                topColor: vec3.fromValues(0, 0.28, 0.18),
+                bottomColor: vec3.fromValues(0, 0.28, 0.18),
+                semiCircle: Math.PI,
+            });
+        mat4.translate(crownCurve2.coordFrame, crownCurve2.coordFrame, vec3.fromValues(0, 0, 0.50))
+        mat4.rotateX(crownCurve2.coordFrame, crownCurve2.coordFrame, glMatrix.toRadian(90));
+        mat4.rotateY(crownCurve2.coordFrame, crownCurve2.coordFrame, glMatrix.toRadian(45));
+        mat4.rotateZ(crownCurve2.coordFrame, crownCurve2.coordFrame, glMatrix.toRadian(5));
+        mat4.scale(crownCurve2.coordFrame, crownCurve2.coordFrame, vec3.fromValues(1.25, 1.25, 2.5));
+        mat4.translate(crownCurve2.coordFrame, crownCurve2.coordFrame, vec3.fromValues(0, 0, -0.5))
+        crownGroup.group.push(crownCurve2);
+
+
+        mat4.translate(crownGroup.coordFrame, crownGroup.coordFrame, vec3.fromValues(0, 0, 14.875));
     }
 }
