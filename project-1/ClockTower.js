@@ -358,8 +358,8 @@ class ClockTower extends ObjectGroup {
                 bottomRadius: 1,
                 numSides: 20,
                 height: 1,
-                topColor: vec3.fromValues(0, 0.28, 0.18),
-                bottomColor: vec3.fromValues(0, 0.28, 0.18),
+                topColor: vec3.fromValues(0, 0.31, 0.21),
+                bottomColor: vec3.fromValues(0, 0.31, 0.21),
                 semiCircle: Math.PI,
             });
         mat4.translate(crownCurve2.coordFrame, crownCurve2.coordFrame, vec3.fromValues(0, 0, 0.50))
@@ -370,6 +370,30 @@ class ClockTower extends ObjectGroup {
         mat4.translate(crownCurve2.coordFrame, crownCurve2.coordFrame, vec3.fromValues(0, 0, -0.5))
         crownGroup.group.push(crownCurve2);
 
+        let crownSpike = new Cone(gl,
+            {
+                radius: 1,
+                height: 1,
+                tipColor: vec3.fromValues(0, 0.3, 0.2),
+                baseColor: vec3.fromValues(0, 0.3, 0.2),
+                radialDiv: 20,
+            }
+        );
+        mat4.translate(crownSpike.coordFrame, crownSpike.coordFrame, vec3.fromValues(0, 0, 1.5));
+        mat4.scale(crownSpike.coordFrame, crownSpike.coordFrame, vec3.fromValues(0.125, 0.125, 2.5));
+        crownGroup.group.push(crownSpike);
+
+        let crownBall = new Sphere(gl,
+            {
+                radius: 1,
+                splitDepth: 5,
+                northColor: vec3.fromValues(0, 0.3, 0.2),
+                equatorColor: vec3.fromValues(0, 0.3, 0.2),
+                southColor: vec3.fromValues(0, 0.3, 0.2),
+            });
+        mat4.translate(crownBall.coordFrame, crownBall.coordFrame, vec3.fromValues(0, 0, 3));
+        mat4.scale(crownBall.coordFrame, crownBall.coordFrame, vec3.fromValues(0.130, 0.130, 0.130));
+        crownGroup.group.push(crownBall);
 
         mat4.translate(crownGroup.coordFrame, crownGroup.coordFrame, vec3.fromValues(0, 0, 14.875));
     }
