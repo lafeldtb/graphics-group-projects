@@ -32,8 +32,8 @@ class ClockTower extends ObjectGroup {
             {
                 radius: 1,
                 height: 1,
-                tipColor: vec3.fromValues(1, 0.8, 0.7),
-                baseColor: vec3.fromValues(1, 0.8, 0.7),
+                tipColor: vec3.fromValues(0.9, 0.7, 0.6),
+                baseColor: vec3.fromValues(0.9, 0.7, 0.6),
                 radialDiv: 4,
             });
         mat4.translate(baseTrimTopSlant.coordFrame, baseTrimTopSlant.coordFrame, vec3.fromValues(0, 0, 1.125));
@@ -127,8 +127,8 @@ class ClockTower extends ObjectGroup {
                 bottomRadius: 1,
                 numSides: 4,
                 height: 1,
-                topColor: vec3.fromValues(0.5, 0.2, 0),
-                bottomColor: vec3.fromValues(0.5, 0.2, 0),
+                topColor: vec3.fromValues(0.49, 0.19, 0),
+                bottomColor: vec3.fromValues(0.49, 0.19, 0),
             });
         mat4.scale(midFill.coordFrame, midFill.coordFrame, vec3.fromValues(1.65, 1.65, 7));
 
@@ -293,6 +293,29 @@ class ClockTower extends ObjectGroup {
 
         }
         //TODO: trim and slant also below clock block
+        let clockTrimTop = new PolygonalPrism(gl,
+            {
+                topRadius: 1,
+                bottomRadius: 1,
+                numSides: 4,
+                height: 1,
+                topColor: vec3.fromValues(1, 0.8, 0.7),
+                bottomColor: vec3.fromValues(1, 0.8, 0.7),
+            });
+        mat4.scale(clockTrimTop.coordFrame, clockTrimTop.coordFrame, vec3.fromValues(1.75, 1.75, 0.125));
+        clockGroup.group.push(clockTrimTop);
+
+        let clockTrimTopSlant = new Cone(gl,
+            {
+                radius: 1,
+                height: 1,
+                tipColor: vec3.fromValues(0.9, 0.7, 0.6),
+                baseColor: vec3.fromValues(0.9, 0.7, 0.6),
+                radialDiv: 4,
+            });
+        mat4.translate(clockTrimTopSlant.coordFrame, clockTrimTopSlant.coordFrame, vec3.fromValues(0, 0, 0.125));
+        mat4.scale(clockTrimTopSlant.coordFrame, clockTrimTopSlant.coordFrame, vec3.fromValues(1.75, 1.75, 1));
+        clockGroup.group.push(clockTrimTopSlant);
 
         mat4.translate(clockGroup.coordFrame, clockGroup.coordFrame, vec3.fromValues(0, 0, 12.625));
     }
