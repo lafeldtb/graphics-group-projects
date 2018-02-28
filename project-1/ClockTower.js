@@ -238,38 +238,62 @@ class ClockTower extends ObjectGroup {
         mat4.scale(clockSide.coordFrame, clockSide.coordFrame, vec3.fromValues(1.65, 1.65, 2.25));
         clockGroup.group.push(clockSide);
 
-        let clockFaceOuter = new Torus(gl,
-            {
-                majorRadius: 1,
-                minorRadius: 0.02,
-//                topColor: vec3.fromValues(1, 0.8, 0.7),
-//                bottomColor: vec3.fromValues(1, 0.8, 0.7),
-            });
-        mat4.rotateX(clockFaceOuter.coordFrame, clockFaceOuter.coordFrame, glMatrix.toRadian(90));
-        mat4.rotateY(clockFaceOuter.coordFrame, clockFaceOuter.coordFrame, glMatrix.toRadian(135));
-        mat4.translate(clockFaceOuter.coordFrame, clockFaceOuter.coordFrame, vec3.fromValues(0, 0, 1.25));
-        mat4.scale(clockFaceOuter.coordFrame, clockFaceOuter.coordFrame, vec3.fromValues(0.75, 0.75, 0.75));
-        mat4.translate(clockFaceOuter.coordFrame, clockFaceOuter.coordFrame, vec3.fromValues(0, 1.5, 0));
+        for(let itr = 0; itr < 4; itr++) {
+            let clockFaceOuter = new Torus(gl,
+                {
+                    majorRadius: 1,
+                    minorRadius: 0.02,
+                    topColor: vec3.fromValues(0, 0, 0),
+                    bottomColor: vec3.fromValues(0, 0, 0),
+                });
+            mat4.rotateX(clockFaceOuter.coordFrame, clockFaceOuter.coordFrame, glMatrix.toRadian(90));
+            mat4.rotateY(clockFaceOuter.coordFrame, clockFaceOuter.coordFrame, glMatrix.toRadian(135 + (90 * itr)));
+            mat4.translate(clockFaceOuter.coordFrame, clockFaceOuter.coordFrame, vec3.fromValues(0, 0, 1.25));
+            mat4.scale(clockFaceOuter.coordFrame, clockFaceOuter.coordFrame, vec3.fromValues(0.75, 0.75, 0.75));
+            mat4.translate(clockFaceOuter.coordFrame, clockFaceOuter.coordFrame, vec3.fromValues(0, 1.5, 0));
 
-        clockGroup.group.push(clockFaceOuter);
+            clockGroup.group.push(clockFaceOuter);
 
-        let clockFaceInner = new Torus(gl,
-            {
-                majorRadius: 1,
-                minorRadius: 0.02,
-//                topColor: vec3.fromValues(1, 0.8, 0.7),
-//                bottomColor: vec3.fromValues(1, 0.8, 0.7),
-            });
-        mat4.rotateX(clockFaceInner.coordFrame, clockFaceInner.coordFrame, glMatrix.toRadian(90));
-        mat4.rotateY(clockFaceInner.coordFrame, clockFaceInner.coordFrame, glMatrix.toRadian(135));
-        mat4.translate(clockFaceInner.coordFrame, clockFaceInner.coordFrame, vec3.fromValues(0, 0, 1.25));
-        mat4.scale(clockFaceInner.coordFrame, clockFaceInner.coordFrame, vec3.fromValues(0.75, 0.75, 0.75));
-        mat4.translate(clockFaceInner.coordFrame, clockFaceInner.coordFrame, vec3.fromValues(0, 1.5, 0));
-        mat4.scale(clockFaceInner.coordFrame, clockFaceInner.coordFrame, vec3.fromValues(0.75, 0.75, 0.75));
+            let clockFaceInner = new Torus(gl,
+                {
+                    majorRadius: 1,
+                    minorRadius: 0.02,
+                    topColor: vec3.fromValues(0, 0, 0),
+                    bottomColor: vec3.fromValues(0, 0, 0),
+                });
+            mat4.rotateX(clockFaceInner.coordFrame, clockFaceInner.coordFrame, glMatrix.toRadian(90));
+            mat4.rotateY(clockFaceInner.coordFrame, clockFaceInner.coordFrame, glMatrix.toRadian(135 + (90 * itr)));
+            mat4.translate(clockFaceInner.coordFrame, clockFaceInner.coordFrame, vec3.fromValues(0, 0, 1.25));
+            mat4.scale(clockFaceInner.coordFrame, clockFaceInner.coordFrame, vec3.fromValues(0.75, 0.75, 0.75));
+            mat4.translate(clockFaceInner.coordFrame, clockFaceInner.coordFrame, vec3.fromValues(0, 1.5, 0));
+            mat4.scale(clockFaceInner.coordFrame, clockFaceInner.coordFrame, vec3.fromValues(0.75, 0.75, 0.75));
 
-        clockGroup.group.push(clockFaceInner);
+            clockGroup.group.push(clockFaceInner);
+
+            let clockBigHand = new Arrow(gl,
+                {
+                    length: 1,
+                    color: vec3.fromValues(0, 0, 0),
+                });
+            mat4.rotateZ(clockBigHand.coordFrame, clockBigHand.coordFrame, glMatrix.toRadian(45 + (90 * itr)));
+            mat4.translate(clockBigHand.coordFrame, clockBigHand.coordFrame, vec3.fromValues(1.25, 0, 1.15));
+            mat4.scale(clockBigHand.coordFrame, clockBigHand.coordFrame, vec3.fromValues(0.25, 0.45, 0.90));
+            clockGroup.group.push(clockBigHand);
+
+            let clockSmallHand = new Arrow(gl,
+                {
+                    length: 1,
+                    color: vec3.fromValues(0, 0, 0),
+                });
+            mat4.rotateZ(clockSmallHand.coordFrame, clockSmallHand.coordFrame, glMatrix.toRadian(45 + (90 * itr)));
+            mat4.translate(clockSmallHand.coordFrame, clockSmallHand.coordFrame, vec3.fromValues(1.25, 0, 1.15));
+            mat4.rotateX(clockSmallHand.coordFrame, clockSmallHand.coordFrame, glMatrix.toRadian(-135));
+            mat4.scale(clockSmallHand.coordFrame, clockSmallHand.coordFrame, vec3.fromValues(0.25, 0.45, 0.65));
+            clockGroup.group.push(clockSmallHand);
+
+        }
+        //TODO: trim and slant also below clock block
+
         mat4.translate(clockGroup.coordFrame, clockGroup.coordFrame, vec3.fromValues(0, 0, 12.625));
-
-
     }
 }
