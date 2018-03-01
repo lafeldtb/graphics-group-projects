@@ -8,7 +8,7 @@ let gl;
 let allObjs = [];
 
 let projUnif;
-let projMat, viewMat, tower, library, target;
+let projMat, viewMat, tower, library, target, treeArray;
 
 function main() {
   canvas = document.getElementById("my-canvas");
@@ -48,6 +48,11 @@ function main() {
     gl.enableVertexAttribArray (colAttr);
     projMat = mat4.create();
     gl.uniformMatrix4fv (projUnif, false, projMat);
+      // viewMat = mat4.lookAt(mat4.create(),
+      //     vec3.fromValues (2, 0, .5),  // eye coord
+      //     vec3.fromValues (0, 0, 0),  // gaze point
+      //     vec3.fromValues (0, 0, 1)   // Z is up
+      // );
       viewMat = mat4.lookAt(mat4.create(),
           vec3.fromValues (0, 2.15, 1.75),  // eye coord
           vec3.fromValues (-1, 0, 1),  // gaze point
@@ -76,16 +81,42 @@ function drawScene() {
 }
 
 function createObject() {
+
     tower = new ClockTower(gl);
     library = new GVLibrary(gl);
-    let ax = new Axes(gl);
-    allObjs.push(ax);
+    // let ax = new Axes(gl);
+    // allObjs.push(ax);
     allObjs.push(tower);
     allObjs.push(library);
 
+    treeArray = [];
+    for(let i = 0; i < 4; i++){
+        treeArray.push(new Tree(gl));
+        allObjs.push(treeArray[i]);
+        mat4.scale(treeArray[i].coordFrame, treeArray[i].coordFrame, vec3.fromValues(0.15, 0.15, 0.15));
+        mat4.translate(treeArray[i].coordFrame, treeArray[i].coordFrame, vec3.fromValues(5, -7, -3));
+        mat4.scale(treeArray[i].coordFrame, treeArray[i].coordFrame, vec3.fromValues(5, 5, 5));
+    }
+    mat4.translate(treeArray[0].coordFrame, treeArray[0].coordFrame, vec3.fromValues(2, 0, 0));
+    mat4.translate(treeArray[1].coordFrame, treeArray[1].coordFrame, vec3.fromValues(-2, 0, 0));
+    mat4.translate(treeArray[2].coordFrame, treeArray[2].coordFrame, vec3.fromValues(0, 2, 0));
+    mat4.translate(treeArray[3].coordFrame, treeArray[3].coordFrame, vec3.fromValues(0, -2, 0));
+
+    let grass = new PolygonalPrism(gl, {
+        topRadius: 1000,
+        bottomRadius: 1000,
+        numSides: 8,
+        height: .01,
+        topColor: vec3.fromValues(.439,.553,.074),
+        bottomColor: vec3.fromValues(.439,.553,.074),
+    });
+    mat4.translate(grass.coordFrame, grass.coordFrame, vec3.fromValues(0, 0, -.47));
+
+    allObjs.push(grass);
+
     mat4.scale(tower.coordFrame, tower.coordFrame, vec3.fromValues(0.15, 0.15, 0.15));
     mat4.translate(tower.coordFrame, tower.coordFrame, vec3.fromValues(5, -7, -3));
-    mat4.translate(library.coordFrame, library.coordFrame, vec3.fromValues(-6, 0, 0));
+    mat4.translate(library.coordFrame, library.coordFrame, vec3.fromValues(-6, 0, .25));
     mat4.rotateZ(library.coordFrame, library.coordFrame, glMatrix.toRadian(225));
 
 }
@@ -209,6 +240,22 @@ function setupHandlers() {
             case 'lib':
                 console.log("lib selected");
                 target = library.coordFrame;
+                break;
+            case 'tree1':
+                console.log("tree selected");
+                target = treeArray[0].coordFrame;
+                break;
+            case 'tree2':
+                console.log("tree selected");
+                target = treeArray[1].coordFrame;
+                break;
+            case 'tree3':
+                console.log("tree selected");
+                target = treeArray[2].coordFrame;
+                break;
+            case 'tree4':
+                console.log("tree selected");
+                target = treeArray[3].coordFrame;
                 break;
         }
 
