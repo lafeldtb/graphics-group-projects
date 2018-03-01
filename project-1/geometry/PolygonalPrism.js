@@ -23,6 +23,8 @@ class PolygonalPrism extends Object3D {
     /* if colors are undefined, generate random colors */
     if (typeof props.topColor === "undefined")
       props.topColor = vec3.fromValues(Math.random(), Math.random(), Math.random());
+    if (typeof props.semiCircle === "undefined")
+      props.semiCircle = 2 * Math.PI;
     if (typeof props.bottomColor === "undefined")
       props.bottomColor = vec3.fromValues(Math.random(), Math.random(), Math.random());
     let vertices = [], colors = [];
@@ -31,7 +33,7 @@ class PolygonalPrism extends Object3D {
       let h = props.height - s * props.height / verticalDiv;
       let r = props.topRadius + s * (props.bottomRadius - props.topRadius) / (verticalDiv + 1);
       for (let k = 0; k < props.numSides; k++) {
-        let angle = k * 2 * Math.PI / props.numSides;
+        let angle = k * props.semiCircle / props.numSides;
         let x = r * Math.cos(angle);
         let y = r * Math.sin(angle);
 

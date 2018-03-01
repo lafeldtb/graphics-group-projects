@@ -32,8 +32,8 @@ class ClockTower extends ObjectGroup {
             {
                 radius: 1,
                 height: 1,
-                tipColor: vec3.fromValues(1, 0.8, 0.7),
-                baseColor: vec3.fromValues(1, 0.8, 0.7),
+                tipColor: vec3.fromValues(0.9, 0.7, 0.6),
+                baseColor: vec3.fromValues(0.9, 0.7, 0.6),
                 radialDiv: 4,
             });
         mat4.translate(baseTrimTopSlant.coordFrame, baseTrimTopSlant.coordFrame, vec3.fromValues(0, 0, 1.125));
@@ -127,8 +127,8 @@ class ClockTower extends ObjectGroup {
                 bottomRadius: 1,
                 numSides: 4,
                 height: 1,
-                topColor: vec3.fromValues(0.5, 0.2, 0),
-                bottomColor: vec3.fromValues(0.5, 0.2, 0),
+                topColor: vec3.fromValues(0.49, 0.19, 0),
+                bottomColor: vec3.fromValues(0.49, 0.19, 0),
             });
         mat4.scale(midFill.coordFrame, midFill.coordFrame, vec3.fromValues(1.65, 1.65, 7));
 
@@ -222,7 +222,179 @@ class ClockTower extends ObjectGroup {
         mat4.translate(midGroup.coordFrame, midGroup.coordFrame, vec3.fromValues(0, 0, 1.125));
 
 
+        /* Clock section */
+        let clockGroup = new ObjectGroup(gl);
+        this.group.push(clockGroup);
 
+        let clockSide = new PolygonalPrism(gl,
+            {
+                topRadius: 1,
+                bottomRadius: 1,
+                numSides: 4,
+                height: 1,
+                topColor: vec3.fromValues(1, 0.8, 0.7),
+                bottomColor: vec3.fromValues(1, 0.8, 0.7),
+            });
+        mat4.scale(clockSide.coordFrame, clockSide.coordFrame, vec3.fromValues(1.65, 1.65, 2.25));
+        clockGroup.group.push(clockSide);
 
+        for(let itr = 0; itr < 4; itr++) {
+            let clockFaceOuter = new Torus(gl,
+                {
+                    majorRadius: 1,
+                    minorRadius: 0.02,
+                    topColor: vec3.fromValues(0, 0, 0),
+                    bottomColor: vec3.fromValues(0, 0, 0),
+                });
+            mat4.rotateX(clockFaceOuter.coordFrame, clockFaceOuter.coordFrame, glMatrix.toRadian(90));
+            mat4.rotateY(clockFaceOuter.coordFrame, clockFaceOuter.coordFrame, glMatrix.toRadian(135 + (90 * itr)));
+            mat4.translate(clockFaceOuter.coordFrame, clockFaceOuter.coordFrame, vec3.fromValues(0, 0, 1.25));
+            mat4.scale(clockFaceOuter.coordFrame, clockFaceOuter.coordFrame, vec3.fromValues(0.75, 0.75, 0.75));
+            mat4.translate(clockFaceOuter.coordFrame, clockFaceOuter.coordFrame, vec3.fromValues(0, 1.5, 0));
+
+            clockGroup.group.push(clockFaceOuter);
+
+            let clockFaceInner = new Torus(gl,
+                {
+                    majorRadius: 1,
+                    minorRadius: 0.02,
+                    topColor: vec3.fromValues(0, 0, 0),
+                    bottomColor: vec3.fromValues(0, 0, 0),
+                });
+            mat4.rotateX(clockFaceInner.coordFrame, clockFaceInner.coordFrame, glMatrix.toRadian(90));
+            mat4.rotateY(clockFaceInner.coordFrame, clockFaceInner.coordFrame, glMatrix.toRadian(135 + (90 * itr)));
+            mat4.translate(clockFaceInner.coordFrame, clockFaceInner.coordFrame, vec3.fromValues(0, 0, 1.25));
+            mat4.scale(clockFaceInner.coordFrame, clockFaceInner.coordFrame, vec3.fromValues(0.75, 0.75, 0.75));
+            mat4.translate(clockFaceInner.coordFrame, clockFaceInner.coordFrame, vec3.fromValues(0, 1.5, 0));
+            mat4.scale(clockFaceInner.coordFrame, clockFaceInner.coordFrame, vec3.fromValues(0.75, 0.75, 0.75));
+
+            clockGroup.group.push(clockFaceInner);
+
+            let clockBigHand = new Arrow(gl,
+                {
+                    length: 1,
+                    color: vec3.fromValues(0, 0, 0),
+                });
+            mat4.rotateZ(clockBigHand.coordFrame, clockBigHand.coordFrame, glMatrix.toRadian(45 + (90 * itr)));
+            mat4.translate(clockBigHand.coordFrame, clockBigHand.coordFrame, vec3.fromValues(1.25, 0, 1.15));
+            mat4.scale(clockBigHand.coordFrame, clockBigHand.coordFrame, vec3.fromValues(0.25, 0.45, 0.90));
+            clockGroup.group.push(clockBigHand);
+
+            let clockSmallHand = new Arrow(gl,
+                {
+                    length: 1,
+                    color: vec3.fromValues(0, 0, 0),
+                });
+            mat4.rotateZ(clockSmallHand.coordFrame, clockSmallHand.coordFrame, glMatrix.toRadian(45 + (90 * itr)));
+            mat4.translate(clockSmallHand.coordFrame, clockSmallHand.coordFrame, vec3.fromValues(1.25, 0, 1.15));
+            mat4.rotateX(clockSmallHand.coordFrame, clockSmallHand.coordFrame, glMatrix.toRadian(-135));
+            mat4.scale(clockSmallHand.coordFrame, clockSmallHand.coordFrame, vec3.fromValues(0.25, 0.45, 0.65));
+            clockGroup.group.push(clockSmallHand);
+
+        }
+        let clockTrimTop = new PolygonalPrism(gl,
+            {
+                topRadius: 1,
+                bottomRadius: 1,
+                numSides: 4,
+                height: 1,
+                topColor: vec3.fromValues(1, 0.8, 0.7),
+                bottomColor: vec3.fromValues(1, 0.8, 0.7),
+            });
+        mat4.scale(clockTrimTop.coordFrame, clockTrimTop.coordFrame, vec3.fromValues(1.75, 1.75, 0.125));
+        clockGroup.group.push(clockTrimTop);
+
+        let clockTrimTopSlant = new Cone(gl,
+            {
+                radius: 1,
+                height: 1,
+                tipColor: vec3.fromValues(0.9, 0.7, 0.6),
+                baseColor: vec3.fromValues(0.9, 0.7, 0.6),
+                radialDiv: 4,
+            });
+        mat4.translate(clockTrimTopSlant.coordFrame, clockTrimTopSlant.coordFrame, vec3.fromValues(0, 0, 0.125));
+        mat4.scale(clockTrimTopSlant.coordFrame, clockTrimTopSlant.coordFrame, vec3.fromValues(1.75, 1.75, 1));
+        clockGroup.group.push(clockTrimTopSlant);
+
+        mat4.translate(clockGroup.coordFrame, clockGroup.coordFrame, vec3.fromValues(0, 0, 12.625));
+
+        /* Top of clock */
+        let crownGroup = new ObjectGroup(gl);
+        this.group.push(crownGroup);
+
+        let crownBase = new PolygonalPrism(gl,
+            {
+                topRadius: 1,
+                bottomRadius: 1,
+                numSides: 4,
+                height: 1,
+                topColor: vec3.fromValues(0, 0.3, 0.2),
+                bottomColor: vec3.fromValues(0, 0.3, 0.2),
+            });
+        mat4.scale(crownBase.coordFrame, crownBase.coordFrame, vec3.fromValues(1.65, 1.65, 0.75));
+        crownGroup.group.push(crownBase);
+
+        let crownCurve1 = new PolygonalPrism(gl,
+            {
+                topRadius: 1,
+                bottomRadius: 1,
+                numSides: 20,
+                height: 1,
+                topColor: vec3.fromValues(0, 0.28, 0.18),
+                bottomColor: vec3.fromValues(0, 0.28, 0.18),
+                semiCircle: Math.PI,
+            });
+        mat4.translate(crownCurve1.coordFrame, crownCurve1.coordFrame, vec3.fromValues(0, 0, 0.50))
+        mat4.rotateX(crownCurve1.coordFrame, crownCurve1.coordFrame, glMatrix.toRadian(90));
+        mat4.rotateY(crownCurve1.coordFrame, crownCurve1.coordFrame, glMatrix.toRadian(135));
+        mat4.rotateZ(crownCurve1.coordFrame, crownCurve1.coordFrame, glMatrix.toRadian(5));
+        mat4.scale(crownCurve1.coordFrame, crownCurve1.coordFrame, vec3.fromValues(1.25, 1.25, 2.5));
+        mat4.translate(crownCurve1.coordFrame, crownCurve1.coordFrame, vec3.fromValues(0, 0, -0.5))
+        crownGroup.group.push(crownCurve1);
+
+        let crownCurve2 = new PolygonalPrism(gl,
+            {
+                topRadius: 1,
+                bottomRadius: 1,
+                numSides: 20,
+                height: 1,
+                topColor: vec3.fromValues(0, 0.31, 0.21),
+                bottomColor: vec3.fromValues(0, 0.31, 0.21),
+                semiCircle: Math.PI,
+            });
+        mat4.translate(crownCurve2.coordFrame, crownCurve2.coordFrame, vec3.fromValues(0, 0, 0.50))
+        mat4.rotateX(crownCurve2.coordFrame, crownCurve2.coordFrame, glMatrix.toRadian(90));
+        mat4.rotateY(crownCurve2.coordFrame, crownCurve2.coordFrame, glMatrix.toRadian(45));
+        mat4.rotateZ(crownCurve2.coordFrame, crownCurve2.coordFrame, glMatrix.toRadian(5));
+        mat4.scale(crownCurve2.coordFrame, crownCurve2.coordFrame, vec3.fromValues(1.25, 1.25, 2.5));
+        mat4.translate(crownCurve2.coordFrame, crownCurve2.coordFrame, vec3.fromValues(0, 0, -0.5))
+        crownGroup.group.push(crownCurve2);
+
+        let crownSpike = new Cone(gl,
+            {
+                radius: 1,
+                height: 1,
+                tipColor: vec3.fromValues(0, 0.3, 0.2),
+                baseColor: vec3.fromValues(0, 0.3, 0.2),
+                radialDiv: 20,
+            }
+        );
+        mat4.translate(crownSpike.coordFrame, crownSpike.coordFrame, vec3.fromValues(0, 0, 1.5));
+        mat4.scale(crownSpike.coordFrame, crownSpike.coordFrame, vec3.fromValues(0.125, 0.125, 2.5));
+        crownGroup.group.push(crownSpike);
+
+        let crownBall = new Sphere(gl,
+            {
+                radius: 1,
+                splitDepth: 5,
+                northColor: vec3.fromValues(0, 0.3, 0.2),
+                equatorColor: vec3.fromValues(0, 0.3, 0.2),
+                southColor: vec3.fromValues(0, 0.3, 0.2),
+            });
+        mat4.translate(crownBall.coordFrame, crownBall.coordFrame, vec3.fromValues(0, 0, 3));
+        mat4.scale(crownBall.coordFrame, crownBall.coordFrame, vec3.fromValues(0.130, 0.130, 0.130));
+        crownGroup.group.push(crownBall);
+
+        mat4.translate(crownGroup.coordFrame, crownGroup.coordFrame, vec3.fromValues(0, 0, 14.875));
     }
 }
