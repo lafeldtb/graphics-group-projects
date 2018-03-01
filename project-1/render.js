@@ -48,12 +48,12 @@ function main() {
     gl.enableVertexAttribArray (colAttr);
     projMat = mat4.create();
     gl.uniformMatrix4fv (projUnif, false, projMat);
-    viewMat = mat4.lookAt(mat4.create(),
-      vec3.fromValues (2, 0, 0),  // eye coord
-      vec3.fromValues (0, 0, 0),  // gaze point
-      vec3.fromValues (0, 0, 1)   // Z is up
-    );
-    gl.uniformMatrix4fv (viewUnif, false, viewMat);
+      viewMat = mat4.lookAt(mat4.create(),
+          vec3.fromValues (0, 2.15, 1.75),  // eye coord
+          vec3.fromValues (-1, 0, 1),  // gaze point
+          vec3.fromValues (0, 0, 1)   // Z is up
+      );
+      gl.uniformMatrix4fv (viewUnif, false, viewMat);
 
     /* recalculate new viewport */
     resizeWindow();
@@ -75,20 +75,21 @@ function drawScene() {
 }
 
 function createObject() {
-    //let tower = new ClockTower(gl);
+    let tower = new ClockTower(gl);
     let library = new GVLibrary(gl);
-    // let ax = new Axes(gl);
+    let ax = new Axes(gl);
 
-    // mat4.scale(tower.coordFrame, tower.coordFrame, vec3.fromValues(0.25, 0.25, 0.25));
-    // mat4.translate(library.coordFrame, library.coordFrame, vec3.fromValues(0, -1, 0));
-    // mat4.rotateX(library.coordFrame, library.coordFrame, glMatrix.toRadian(-90));
-    // mat4.rotateZ(library.coordFrame, library.coordFrame, glMatrix.toRadian(+45));
-    // mat4.rotateX(ax.coordFrame, ax.coordFrame, glMatrix.toRadian(-90));
-    // mat4.rotateZ(ax.coordFrame, ax.coordFrame, glMatrix.toRadian(+45));
-    // mat4.translate(ax.coordFrame, ax.coordFrame, vec3.fromValues(-1, 0, -3));
+    mat4.scale(tower.coordFrame, tower.coordFrame, vec3.fromValues(0.15, 0.15, 0.15));
+    mat4.translate(tower.coordFrame, tower.coordFrame, vec3.fromValues(5, -7, -3));
+    mat4.translate(library.coordFrame, library.coordFrame, vec3.fromValues(-6, 0, 0));
+    //mat4.rotateX(library.coordFrame, library.coordFrame, glMatrix.toRadian(-90));
+    mat4.rotateZ(library.coordFrame, library.coordFrame, glMatrix.toRadian(225));
+    //mat4.rotateX(ax.coordFrame, ax.coordFrame, glMatrix.toRadian(-90));
+    //mat4.rotateZ(ax.coordFrame, ax.coordFrame, glMatrix.toRadian(+45));
+    //mat4.translate(ax.coordFrame, ax.coordFrame, vec3.fromValues(-1, 0, -3));
 
-    // allObjs.push(ax);
-    //allObjs.push(tower);
+    allObjs.push(ax);
+    allObjs.push(tower);
     allObjs.push(library);
 }
 
@@ -163,6 +164,38 @@ function setupHandlers() {
                 mat4.multiply(viewMat, position, viewMat);
                 window.requestAnimFrame(drawScene);
                 break;
+            case '1':
+                //Interesting point 1
+                viewMat = mat4.lookAt(mat4.create(),
+                    vec3.fromValues (0, 2.15, 1.75),  // eye coord
+                    vec3.fromValues (-1, 0, 1),  // gaze point
+                    vec3.fromValues (0, 0, 1)   // Z is up
+                );
+                gl.uniformMatrix4fv (viewUnif, false, viewMat);
+                window.requestAnimationFrame(drawScene);
+                break;
+            case '2':
+                //Interesting point 2
+                viewMat = mat4.lookAt(mat4.create(),
+                    vec3.fromValues (-2.5, -6, 1.75),  // eye coord
+                    vec3.fromValues (-1, 0, -0.75),  // gaze point
+                    vec3.fromValues (0, 0, 1)   // Z is up
+                );
+                gl.uniformMatrix4fv (viewUnif, false, viewMat);
+                window.requestAnimationFrame(drawScene);
+                break;
+            case '3':
+                //Interesting point 3
+                viewMat = mat4.lookAt(mat4.create(),
+                    vec3.fromValues (1.5, -1.5, 1),  // eye coord
+                    vec3.fromValues (0, -1, 0.85),  // gaze point
+                    vec3.fromValues (0, 0, 1)   // Z is up
+                );
+                gl.uniformMatrix4fv (viewUnif, false, viewMat);
+                window.requestAnimationFrame(drawScene);
+                break;
+
+
         }
     })
 }
