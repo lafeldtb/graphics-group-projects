@@ -8,7 +8,7 @@ let gl;
 let allObjs = [];
 
 let projUnif;
-let projMat, viewMat;
+let projMat, viewMat, tower, library, target;
 
 function main() {
   canvas = document.getElementById("my-canvas");
@@ -55,6 +55,7 @@ function main() {
       );
       gl.uniformMatrix4fv (viewUnif, false, viewMat);
 
+      target = viewMat;
     /* recalculate new viewport */
     resizeWindow();
 
@@ -75,22 +76,18 @@ function drawScene() {
 }
 
 function createObject() {
-    let tower = new ClockTower(gl);
-    let library = new GVLibrary(gl);
+    tower = new ClockTower(gl);
+    library = new GVLibrary(gl);
     let ax = new Axes(gl);
+    allObjs.push(ax);
+    allObjs.push(tower);
+    allObjs.push(library);
 
     mat4.scale(tower.coordFrame, tower.coordFrame, vec3.fromValues(0.15, 0.15, 0.15));
     mat4.translate(tower.coordFrame, tower.coordFrame, vec3.fromValues(5, -7, -3));
     mat4.translate(library.coordFrame, library.coordFrame, vec3.fromValues(-6, 0, 0));
-    //mat4.rotateX(library.coordFrame, library.coordFrame, glMatrix.toRadian(-90));
     mat4.rotateZ(library.coordFrame, library.coordFrame, glMatrix.toRadian(225));
-    //mat4.rotateX(ax.coordFrame, ax.coordFrame, glMatrix.toRadian(-90));
-    //mat4.rotateZ(ax.coordFrame, ax.coordFrame, glMatrix.toRadian(+45));
-    //mat4.translate(ax.coordFrame, ax.coordFrame, vec3.fromValues(-1, 0, -3));
 
-    allObjs.push(ax);
-    allObjs.push(tower);
-    allObjs.push(library);
 }
 
 function resizeWindow() {
@@ -112,56 +109,56 @@ function setupHandlers() {
                 //Move forward
                 //Translate along the Z axis of viewMat
                 mat4.fromTranslation(position, vec3.fromValues(0, 0, 0.1));
-                mat4.multiply(viewMat, position, viewMat);
+                mat4.multiply(target, position, target);
                 window.requestAnimationFrame(drawScene);
                 break;
             case 'S':
                 //Move backward
                 //Translate along the Z axis of viewMat
                 mat4.fromTranslation(position, vec3.fromValues(0, 0, -0.1));
-                mat4.multiply(viewMat, position, viewMat);
+                mat4.multiply(target, position, target);
                 window.requestAnimationFrame(drawScene);
                 break;
             case 'I':
                 //Pitch +
                 //Rotate along X axis of viewMat
                 mat4.fromXRotation(position, 2*Math.PI/100);
-                mat4.multiply(viewMat, position, viewMat);
+                mat4.multiply(target, position, target);
                 window.requestAnimFrame(drawScene);
                 break;
             case 'K':
                 //Pitch -
                 //Rotate along X axis of viewMat
                 mat4.fromXRotation(position, -(2*Math.PI/100));
-                mat4.multiply(viewMat, position, viewMat);
+                mat4.multiply(target, position, target);
                 window.requestAnimFrame(drawScene);
                 break;
             case 'A':
                 //Roll Left
                 //Rotate along z axis of viewMat
                 mat4.fromZRotation(position, -(2*Math.PI/100));
-                mat4.multiply(viewMat, position, viewMat);
+                mat4.multiply(target, position, target);
                 window.requestAnimFrame(drawScene);
                 break;
             case 'D':
                 //Roll Right
                 //Rotate along z axis of viewMat
                 mat4.fromZRotation(position, 2*Math.PI/100);
-                mat4.multiply(viewMat, position, viewMat);
+                mat4.multiply(target, position, target);
                 window.requestAnimFrame(drawScene);
                 break;
             case 'J':
                 //Yaw Left
                 //Rotate along y axis of viewMat
                 mat4.fromYRotation(position, -(2*Math.PI/100));
-                mat4.multiply(viewMat, position, viewMat);
+                mat4.multiply(target, position, target);
                 window.requestAnimFrame(drawScene);
                 break;
             case 'L':
                 //Yaw Right
                 //Rotate along y axis of viewMat
                 mat4.fromYRotation(position, 2*Math.PI/100);
-                mat4.multiply(viewMat, position, viewMat);
+                mat4.multiply(target, position, target);
                 window.requestAnimFrame(drawScene);
                 break;
             case '1':
@@ -197,5 +194,23 @@ function setupHandlers() {
 
 
         }
+    });
+    let objSelect = document.getElementById('objSelect');
+    objSelect.addEventListener('change', event => {
+        switch(event.target.value) {
+            case 'camera':
+                console.log("camera selected");
+                target = viewMat;
+                break;
+            case 'clock':
+                console.log("clock selected");
+                target = tower.coordFrame;
+                break;
+            case 'lib':
+                console.log("lib selected");
+                target = library.coordFrame;
+                break;
+        }
+
     })
 }
