@@ -119,9 +119,39 @@ export default class App {
             case 'testbox':
                 this.target = testmesh;
                 break;
+            case 'light1':
+                this.target = lightOne;
+                break;
+            case 'light2':
+                this.target = lightTwo;
+                break;
         }
 
-    })
+    });
+
+    let light1 = document.getElementById('light1');
+    let light2 = document.getElementById('light2');
+    light1.addEventListener('change', event => {
+        if(event.target.checked) {
+            this.scene.add(lightOne);
+            requestAnimationFrame(() => this.render());
+        } else {
+            this.scene.remove(lightOne);
+            requestAnimationFrame(() => this.render());
+        }
+    });
+    light2.addEventListener('change', event => {
+        console.log(event);
+        if(event.target.checked) {
+            this.scene.add(lightTwo);
+            requestAnimationFrame(() => this.render());
+        } else {
+            this.scene.remove(lightTwo);
+            requestAnimationFrame(() => this.render());
+        }
+    });
+
+
   }
 
   render() {
