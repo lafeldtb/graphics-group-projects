@@ -12,6 +12,7 @@ import {Group} from "three";
 export default class App {
 
     constructor() {
+        this.SPEED = 1;
         const c = document.getElementById('mycanvas');
         // Enable antialias for smoother lines
         this.renderer = new THREE.WebGLRenderer({canvas: c, antialias: true});
@@ -44,6 +45,7 @@ export default class App {
         this.myJoyCon.matrixAutoUpdate = false;
         this.myTV.matrixAutoUpdate = false;
         this.myMario.matrixAutoUpdate = false;
+        this.switchGroup.matrixAutoUpdate = false;
 
         const trans = new THREE.Matrix4().makeTranslation(-10,-10,60);
         const scale = new THREE.Matrix4().makeScale(.125,.125,.125);
@@ -196,6 +198,12 @@ export default class App {
 
         });
 
+        let speedSelect = document.getElementById('speed');
+        speedSelect.addEventListener('change', event =>{
+            this.SPEED = speedSelect.value;
+            console.log(this.SPEED);
+        });
+
         let light1 = document.getElementById('light1');
         let light2 = document.getElementById('light2');
         light1.addEventListener('change', event => {
@@ -273,53 +281,47 @@ export default class App {
 
     moveJoystick(){
         if(this.joyDirection === 0){
-            if(this.joyAngle === 45){
+            if(this.joyAngle >= 22.5){
                 this.joyDirection = 1;
             }
             else{
-                this.joyAngle += .5;
-                const rotation = new THREE.Matrix4().makeRotationX(THREE.Math.degToRad(.5));
+                this.joyAngle += .5*this.SPEED;
+                const rotation = new THREE.Matrix4().makeRotationX(THREE.Math.degToRad(.5*this.SPEED));
                 this.myJoystick.matrix.multiply(rotation);
-                this.joyAngle += .0625;
-                const sideRot = new THREE.Matrix4().makeRotationZ(THREE.Math.degToRad(.0625));
-                this.myJoystick.matrix.multiply(sideRot);
             }
         }
         else{
-            if(this.joyAngle === -45){
+            if(this.joyAngle <= -22.5){
                 this.joyDirection = 0;
             }
             else{
-                this.joyAngle -= .5;
-                const rotation = new THREE.Matrix4().makeRotationX(THREE.Math.degToRad(-.5));
+                this.joyAngle -= .5*this.SPEED;
+                const rotation = new THREE.Matrix4().makeRotationX(THREE.Math.degToRad(-.5*this.SPEED));
                 this.myJoystick.matrix.multiply(rotation);
-                this.joyAngle -= .0625;
-                const sideRot = new THREE.Matrix4().makeRotationZ(THREE.Math.degToRad(-.0625));
-                this.myJoystick.matrix.multiply(sideRot);
             }
         }
     }
     moveJoycon(){
         if(this.joyDirection === 0){
-            if(this.joyAngle === 45){
+            if(this.joyAngle === 22.5){
                 this.joyDirection = 1;
             }
             else{
-                const rotation = new THREE.Matrix4().makeRotationX(THREE.Math.degToRad(.0625));
-                this.myJoyCon.matrix.multiply(rotation);
-                const sideRot = new THREE.Matrix4().makeRotationZ(THREE.Math.degToRad(.0625));
-                this.myJoyCon.matrix.multiply(sideRot);
+                const rotation = new THREE.Matrix4().makeRotationX(THREE.Math.degToRad(.0625*this.SPEED));
+                this.switchGroup.matrix.multiply(rotation);
+                const sideRot = new THREE.Matrix4().makeRotationZ(THREE.Math.degToRad(.0625*this.SPEED));
+                this.switchGroup.matrix.multiply(sideRot);
             }
         }
         else{
-            if(this.joyAngle === -45){
+            if(this.joyAngle === -22.5){
                 this.joyDirection = 0;
             }
             else{
-                const rotation = new THREE.Matrix4().makeRotationX(THREE.Math.degToRad(-.0625));
-                this.myJoyCon.matrix.multiply(rotation);
-                const sideRot = new THREE.Matrix4().makeRotationZ(THREE.Math.degToRad(-.0625));
-                this.myJoyCon.matrix.multiply(sideRot);
+                const rotation = new THREE.Matrix4().makeRotationX(THREE.Math.degToRad(-.0625*this.SPEED));
+                this.switchGroup.matrix.multiply(rotation);
+                const sideRot = new THREE.Matrix4().makeRotationZ(THREE.Math.degToRad(-.0625*this.SPEED));
+                    this.switchGroup.matrix.multiply(sideRot);
             }
         }
     }
